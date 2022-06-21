@@ -1,6 +1,6 @@
 import cv2
 import numpy as np
-from NumberExtractor import processData, evaluateModel, predict
+from src.NumberExtractor import processData, evaluateModel, predict
 # Reads in what board to solve
 def readImg(image_url):
     img = cv2.imread(image_url, 0)

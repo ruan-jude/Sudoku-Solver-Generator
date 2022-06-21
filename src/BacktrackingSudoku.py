@@ -1,29 +1,4 @@
-import json, typing
-
-# example boards
-board1 = [
-    [0, 0, 0, 2, 6, 0, 7, 0, 1],
-    [6, 8, 0, 0, 7, 0, 0, 9, 0],
-    [1, 9, 0, 0, 0, 4, 5, 0, 0],
-    [8, 2, 0, 1, 0, 0, 0, 4, 0],
-    [0, 0, 4, 6, 0, 2, 9, 0, 0],
-    [0, 5, 0, 0, 0, 3, 0, 2, 8],
-    [0, 0, 9, 3, 0, 0, 0, 7, 4],
-    [0, 4, 0, 0, 5, 0, 0, 3, 6],
-    [7, 0, 3, 0, 1, 8, 0, 0, 0]
-]
-
-board2 = [
-    [0, 2, 0, 6, 0, 8, 0, 0, 0],
-    [5, 8, 0, 0, 0, 9, 7, 0, 0],
-    [0, 0, 0, 0, 4, 0, 0, 0, 0],
-    [3, 7, 0, 0, 0, 0, 5, 0, 0],
-    [6, 0, 0, 0, 0, 0, 0, 0, 4],
-    [0, 0, 8, 0, 0, 0, 0, 1, 3],
-    [0, 0, 0, 0, 2, 0, 0, 0, 0],
-    [0, 0, 9, 8, 0, 0, 0, 3, 6],
-    [0, 0, 0, 3, 0, 6, 0, 9, 0]
-]
+import typing
 
 class BacktrackingSudoku:
     """
@@ -115,7 +90,8 @@ class BacktrackingSudoku:
         '''
         for r in range(9):
             for c in range(9):
-                if self.bo[r][c] == 0: return (r, c)
+                if self.bo[r][c] == 0: 
+                    return (r, c)
         
         return None
     
@@ -148,17 +124,20 @@ class BacktrackingSudoku:
         '''
         # row check
         for c in range(9):
-            if self.bo[row][c] == num and c != col: return False
+            if c != col and self.bo[row][c] == num: 
+                return False
 
         # col check
         for r in range(9):
-            if self.bo[r][col] == num and r != row: return False
+            if r != row and self.bo[r][col] == num: 
+                return False
 
         # box check
         boxRow, boxCol = row // 3, col // 3
-        for r in range(boxRow * 3, boxRow * 4):
-            for c in range(boxCol * 3, boxCol * 4):
-                if self.bo[r][c] == num and r != boxRow and c != boxCol: return False
+        for r in range(boxRow * 3, boxRow * 3 + 3):
+            for c in range(boxCol * 3, boxCol * 3 + 3):
+                if r != row and c != col and self.bo[r][c] == num: 
+                    return False
         
         return True
 
@@ -180,5 +159,5 @@ class BacktrackingSudoku:
         return self.solveCount 
 
     def getBoard(self) -> list:
-        ''' Returns board ''' 
+        ''' Returns board list ''' 
         return self.bo           

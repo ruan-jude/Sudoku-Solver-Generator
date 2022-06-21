@@ -1,12 +1,12 @@
-from HeuristicSudoku import HeuristicSudoku
-from BacktrackingSudoku import BacktrackingSudoku
+from src.HeuristicSudoku import HeuristicSudoku
+from src.BacktrackingSudoku import BacktrackingSudoku
 import time
 
 def main():
-    # board = HeuristicSudoku()
-    start = time.time()
-    board = BacktrackingSudoku()
-    print(time.time() - start)
+    board = HeuristicSudoku()
+    #start = time.time()
+    #board = BacktrackingSudoku()
+    #print(time.time() - start)
     board.printBoard()
     board.solveBoard()
     board.printBoard()
