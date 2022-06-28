@@ -1,10 +1,9 @@
-import sys, os, glob, time
+import sys, os, glob, time, typing, copy
 sys.path.append(".")
-from typing import Tuple
 from src.BacktrackingSudoku import BacktrackingSudoku
 from src.HeuristicSudoku import HeuristicSudoku
 
-def openBoard(path : str) -> Tuple:
+def openBoard(path : str) -> typing.Tuple[list, list]:
     '''
     Retrieves the board written in the path file
 
@@ -34,46 +33,30 @@ def openBoard(path : str) -> Tuple:
     
     return (bo, sol)
 
-def backtrackingTest() -> None:
-    ''' Tests backtracking method printing solve count and time elapsed '''
-    print("Backtracking Tests")
-    print("------------------")
-    for file in glob.glob("*.txt"): 
-        bo, sol = openBoard(file)
-        board = BacktrackingSudoku(bo)
-        start = time.time()
-        board.solveBoard()
-        end = time.time()
-
-        if board.getBoard() == sol:
-            print(file)
-            print("  Solve calls: %d" % board.solveCount)
-            print("  Time elapsed: %f milliseconds" % ((end - start) * 1000))
-            print()
-        else: 
-            print("Board solution incorrect.")
-
-def heuristicTest():
-    ''' Tests heuristic method printing solve count and time elapsed '''
-    print("Heuristic Tests")
-    print("------------------")
-    for file in glob.glob("*.txt"): 
-        bo, sol = openBoard(file)
-        board = HeuristicSudoku(bo)
-        start = time.time()
-        board.solveBoard()
-        end = time.time()
-
-        if board.getBoard() == sol:
-            print(file)
-            print("  Solve calls: %d" % board.solveCount)
-            print("  Time elapsed: %f milliseconds" % ((end - start) * 1000))
-            print()
-        else: 
-            print("Board solution incorrect.")
-
 if __name__ == "__main__":
     os.chdir("./tests/sampleBoards") 
-    backtrackingTest()
-    print("****************\n")
-    #heuristicTest()
+    print("Simple vs heuristic backtracking")
+    print("---------------------------------")
+    # Tests heuristic and simple backtracking method 
+    # Printing solve count and time elapsed
+    for file in glob.glob("*.txt"): 
+        bo1, sol = openBoard(file)
+        bo2 = copy.deepcopy(bo1)
+
+        simpBo = BacktrackingSudoku(bo1)
+        start = time.time()
+        simpBo.solveBoard()
+        simpTime = (time.time() - start) * 1000
+        
+        heurBo = HeuristicSudoku(bo2)
+        start = time.time()
+        heurBo.solveBoard()
+        heurTime = (time.time() - start) * 1000
+        
+        print(file)
+        if simpBo.getBoard() == sol and heurBo.getBoard() == sol:
+            print("  Solve calls:\t\t%d\t\t%d" % (simpBo.solveCount, heurBo.solveCount))
+            print("  Time elapsed (ms):\t%.2f\t\t%.2f" % (simpTime, heurTime))
+            print()
+        elif simpBo.getBoard() != sol: print("Simple backtracking solution incorrect.")
+        else: print("Heuristic backtracking solution incorrect.")

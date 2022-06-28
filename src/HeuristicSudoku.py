@@ -1,19 +1,6 @@
 from cmath import inf
-import typing
 import numpy as np
-
-# example boards
-board1 = [
-    [0, 0, 0, 2, 6, 0, 7, 0, 1],
-    [6, 8, 0, 0, 7, 0, 0, 9, 0],
-    [1, 9, 0, 0, 0, 4, 5, 0, 0],
-    [8, 2, 0, 1, 0, 0, 0, 4, 0],
-    [0, 0, 4, 6, 0, 2, 9, 0, 0],
-    [0, 5, 0, 0, 0, 3, 0, 2, 8],
-    [0, 0, 9, 3, 0, 0, 0, 7, 4],
-    [0, 4, 0, 0, 5, 0, 0, 3, 6],
-    [7, 0, 3, 0, 1, 8, 0, 0, 0]
-]
+import typing
 
 class HeuristicSudoku:
     """
@@ -21,22 +8,22 @@ class HeuristicSudoku:
     A class used to represent a Sudoku Board with backtracking implementation
     Heuristics used to reduce runtime (testing)
 
-    Heuristic 1: Row, column, box inconsistency
-        Implemented automatically
-    
     ...
     
     Attributes
         bo : list
             2D array which holds current state of Sudoku board 
         remVals : list
-            2D array which holds a list of possible values for each board cell
+            2D array where each cell holds a set of possible values for that cell
         numCount : list
             2D array which holds the count for remaining values for each board cell
             Value set to 'inf' if the number is set
         valueCount : dictionary
             Holds the count for each possible Sudoku board value
             Equals 0 when the cell is set
+        solveCount : int
+            Counts how many time solve is called
+
     ...
 
     Methods
@@ -50,33 +37,38 @@ class HeuristicSudoku:
             Finds empty cell to test, will prioritize lowest value
         printBoard(self) -> None
             Prints the current state of the board with proper spacing
+        printSolveCount(self) -> None
+            Prints the number of times Solve is called 
+        getBoard(self) -> list
+            Returns board
 
     """
-
-    def __init__(self):
-        ''' Each instance represents a single Sudoku board '''
-        self.bo = [[0 for i in range(9)] for j in range(9)]
-        self.remVals = [[set([1, 2, 3, 4, 5, 6, 7, 8, 9]) for i in range(9)] for j in range(9)]
+    
+    def __init__(self, board : list):
+        '''
+        Each instance represents a single Sudoku board
+        Sets board to example board
+        '''
+        self.bo = board
+        self.remVals = [[set([1, 2, 3, 4, 5, 6, 7, 8, 9]) for __ in range(9)] for _ in range(9)]
         self.numCount = [[9]*9 for _ in range(9)]
         self.valueCount = {0:0, 1:0, 2:0, 3:0, 4:0, 5:0, 6:0, 7:0, 8:0, 9:0}
-
-        # ===== TEMP ===========
-        self.bo = board1
-        # ======================
+        self.solveCount = 0
 
         # sets numCount for all set cells to 'inf'
         for r in range(9):
             for c in range(9):
-                if self.bo[r][c] != 0: self.numCount[r][c] = inf
-
+                if self.bo[r][c] != 0:
+                    self.numCount[r][c] = inf
+        
         # initial remVals, numCount, and valueCount
         for r in range(9):
             for c in range(9):
                 n = self.bo[r][c]
-                if n != 0: 
+                if n != 0:
                     self.valueCount[n] += 1
                     self.updateRemVals(n, r, c)
-
+    
     def solveBoard(self):
         ''' 
         Solves instantiated board through backtracking with heuristics 
@@ -92,6 +84,7 @@ class HeuristicSudoku:
             True    Board solution is found and bo is updated
             False   Board solution is NOT found
         '''
+        self.solveCount += 1
         emptyCell = self.findEmpty()
 
         # if there are no empty cells, board must be complete
@@ -109,7 +102,7 @@ class HeuristicSudoku:
             self.valueCount[n] += 1
             # update remVals
             updatedCells = self.updateRemVals(n, row, col)
-            
+
             if self.solveBoard(): return True
 
             # reset Board
@@ -146,30 +139,29 @@ class HeuristicSudoku:
         ...
 
         Returns
-            updatedCells    set of cells that are updated
+            updatedCells    set of cells that were updated with the values
         '''
         updatedCells = set()
 
         # row update
-        for c in range(9): 
-            if c == col: continue
+        for c in range(9):
             if c != col and num in self.remVals[row][c]:
                 updatedCells.add((row, c))
                 self.numCount[row][c] -= 1
                 self.remVals[row][c].discard(num)
 
         # col update
-        for r in range(9): 
+        for r in range(9):
             if r != row and (r, col) not in updatedCells and num in self.remVals[r][col]:
                 updatedCells.add((r, col))
                 self.numCount[r][col] -= 1
                 self.remVals[r][col].discard(num)
-
+        
         # box update
         boxRow, boxCol = row // 3, col // 3
-        for r in range(boxRow * 3, boxRow * 4):
-            for c in range(boxCol * 3, boxCol * 4):
-                if (r, c) not in updatedCells and num in self.remVals[r][c]:
+        for r in range(boxRow * 3, boxRow * 3 + 3):
+            for c in range(boxCol * 3, boxCol * 3 + 3):
+                if (r, c) != (row, col) and (r, c) not in updatedCells and num in self.remVals[r][c]:
                     updatedCells.add((r, c))
                     self.numCount[r][c] -= 1
                     self.remVals[r][c].discard(num)
@@ -187,7 +179,7 @@ class HeuristicSudoku:
             updatedCells
                 set containing all cells to return num into
             num
-        '''
+        ''' 
         for cell in updatedCells:
             row, col = cell
             self.remVals[row][col].add(num)
@@ -209,7 +201,7 @@ class HeuristicSudoku:
         if self.numCount[smallestInd[0]][smallestInd[1]] == inf: return None
 
         return smallestInd
-    
+
     def printBoard(self) -> None:
         ''' Prints the current state of the board with proper spacing '''
         for r in range(9):
@@ -222,3 +214,11 @@ class HeuristicSudoku:
                 else: print(str(self.bo[r][c]) + " ", end="")
         
         print()
+
+    def printSolveCount(self) -> None:
+        ''' Prints the number of times Solve is called '''
+        return self.solveCount 
+
+    def getBoard(self) -> list:
+        ''' Returns board list ''' 
+        return self.bo  

@@ -30,14 +30,6 @@ class BacktrackingSudoku:
             Returns board
 
     """
-    
-    def __init__(self):
-        ''' 
-        Each instance represents a single Sudoku board 
-        Empty board
-        '''
-        self.bo = [[0 for i in range(9)] for j in range(9)]
-        self.solveCount = 0
 
     def __init__(self, board : list):
         ''' 
