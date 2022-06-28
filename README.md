@@ -13,8 +13,10 @@ make run
 
 # **Table of Contents**
 1. [To Do](#to-do)
-2. [Algorithm Analysis](#algorithm-analysis)
-3. [Sources/References](#sources)
+2. [Heuristics Implemented](#heuristics-implemented)
+3. [Sudoku Boards](#sudoku-boards-used)
+4. [Algorithm Analysis](#algorithm-analysis)
+5. [Sources/References](#sources)
 
 - - - -
 
@@ -30,13 +32,51 @@ make run
     - [ ] Area set cover elimination
     - [ ] Unique number area
     - [ ] Unique number mention
+- [ ] Board generation
+- [ ] Computer vision implementation
+
+## **Heuristics Implemented**
+1. Area inconsistency and insufficiency: Two cells cannot share the same value, and each cell must have a valid value to set
+    - Extension, factoring two uniqueness heuristics: 
+2. Area set cover elimination
+3. Unique row/column elimination
+4. Unique mention in area
+
+## **Sudoku Boards and Heuristic Utilization**
+Boards and rankings are obtained from [Sudoku Sandiway](https://sandiway.arizona.edu/sudoku/examples.html).
+- Board 1
+    - Beginner
+    - Only Heuristic 1
+- Board 2
+    - Beginner
+    - Only Heuristic 1
+- Board 3
+    - Intermediate
+    - Heuristic 1 & 2
+- Board 4
+    - Difficult
+    - Extended Heuristic 1 & 4
+- Board 5
+    - Difficult
+    - Extended Heuristic 1
+- Board 6
+    - Extreme Difficulty
+    - ...
+
 
 ## **Algorithm Analysis**
-For 
+Both algorithms utilize similar algorithm structures in order to solve each Sudoku board. 
+1. An empty cell in the board is selected.
+2. Digits, 1-9, are placed in the selected cell.
+3. Each digit is checked for validity, and placed if valid. 
+4. The board is then filled recursively until a complete board, or until a cell has no valid digits.
+We will consider each recursive call to the solve method as an iteration. 
 
-For backtracking using heuristics we will be implementing logical tricks used by humans to help reduce possible cell values. The heuristics are as follows:
+For simple backtracking, an empty cell is selected (step 1) by iterating through each cell until an empty one is found. Each digit from 1-9 is checked to be valid in the given cell, and if the digit is valid it is placed (step 2). These two steps choose cells and select digits arbitrarily and can lead to very long runtimes if unlucky.
 
-1. Area inconsistency and insufficiency: Two cells cannot share the same value, and each cell must have a valid value to set
+For backtracking using heuristics we will be implementing logical tricks used by humans to help reduce possible cell values. The heurstics used can be found in the [Heuristics](#heuristics-implemented) section. 
+
+
 
 ## **Sources**
 - [Simple backtracking algorithm](https://www.techwithtim.net/tutorials/python-programming/sudoku-solver-backtracking/) - TechWithTim
