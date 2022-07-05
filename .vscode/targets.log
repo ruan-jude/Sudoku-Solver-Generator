@@ -7,10 +7,10 @@ make all --print-data-base --no-builtin-variables --no-builtin-rules --question
 
 # This program built for i386-apple-darwin11.3.0
  
-Makefile:5: *** missing separator.  Stop.
+make: *** No rule to make target `all'.  Stop.
 
 
-# Make data base, printed on Tue Jun 21 11:10:05 2022
+# Make data base, printed on Tue Jul  5 10:41:32 2022
 
 # Variables
 
@@ -36,18 +36,21 @@ VSCODE_NLS_CONFIG = {"locale":"en-us","availableLanguages":{},"_languagePackSupp
 _ = /usr/bin/make
 # makefile (from `Makefile', line 1)
 MAKEFILE_LIST :=  Makefile
+# makefile (from `Makefile', line 3)
+PIP = $(VENV)/bin/pip
 # environment
 VSCODE_VERBOSE_LOGGING = true
 # environment
 __CFBundleIdentifier = com.microsoft.VSCode
+ 
 # environment
 INFOPATH = /opt/homebrew/share/info:
 # environment
-VSCODE_IPC_HOOK_EXTHOST = /var/folders/7z/t5ydlbsj4dj8q2t4dwbg26tr0000gn/T/vscode-ipc-f2ebf4b4-931e-4a8d-bca9-20ff94609dd4.sock
+VSCODE_IPC_HOOK_EXTHOST = /var/folders/7z/t5ydlbsj4dj8q2t4dwbg26tr0000gn/T/vscode-ipc-0807524a-b8cb-4a62-9f45-47d6782c2e2f.sock
 # environment
 VSCODE_CWD = /
-# environment
-PATH = /opt/homebrew/bin:/opt/homebrew/sbin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin
+# makefile (from `Makefile', line 4)
+PATH = /Users/ruanjude/home/code/python/Sudoku-Solver-Generator
 # environment
 VSCODE_LOG_STACK = false
 # environment
@@ -55,7 +58,7 @@ ELECTRON_RUN_AS_NODE = 1
 # default
 .FEATURES := target-specific order-only second-expansion else-if archives jobserver check-symlink
 # environment
-SSH_AUTH_SOCK = /private/tmp/com.apple.launchd.61VhEA3FLu/Listeners
+SSH_AUTH_SOCK = /private/tmp/com.apple.launchd.YppQfbCfqr/Listeners
 # automatic
 %F = $(notdir $%)
 # environment
@@ -66,6 +69,8 @@ PWD = /Users/ruanjude/home/code/python/Sudoku-Solver-Generator
 HOMEBREW_CELLAR = /opt/homebrew/Cellar
 # environment
 ORIGINAL_XDG_CURRENT_DESKTOP = undefined
+# makefile (from `Makefile', line 2)
+PYTHON = $(VENV)/bin/python3
 # environment
 MANPATH = /opt/homebrew/share/man::
 # environment
@@ -100,6 +105,8 @@ USER = ruanjude
 .DEFAULT_GOAL := run
 # automatic
 %D = $(patsubst %/,%,$(dir $%))
+# makefile (from `Makefile', line 1)
+VENV = venv
 # default
 MAKE_COMMAND := /Library/Developer/CommandLineTools/usr/bin/make
 # default
@@ -141,16 +148,15 @@ LC_ALL = C
 # default
 SUFFIXES := 
 # default
- 
 .INCLUDE_DIRS = /usr/local/include
 # environment
 MAKELEVEL := 0
 # environment
 LANG = C
 # environment
-VSCODE_PID = 9512
+VSCODE_PID = 1098
 # variable set hash-table stats:
-# Load=67/1024=7%, Rehash=0, Collisions=1/82=1%
+# Load=70/1024=7%, Rehash=0, Collisions=1/97=1%
 
 # Pattern-specific Variable Values
 
@@ -158,9 +164,9 @@ VSCODE_PID = 9512
 
 # Directories
 
-# . (device 16777231, inode 25177839): 14 files, no impossibilities.
+# . (device 16777234, inode 25177839): 11 files, no impossibilities.
 
-# 14 files, no impossibilities in 1 directories.
+# 11 files, no impossibilities in 1 directories.
 
 # Implicit Rules
 
@@ -171,9 +177,20 @@ VSCODE_PID = 9512
 # Not a target:
 all:
 #  Command-line target.
+#  Implicit rule search has been done.
+#  File does not exist.
+#  File has not been updated.
+# variable set hash-table stats:
+# Load=0/32=0%, Rehash=0, Collisions=0/0=0%
+
+venv/bin/activate: requirements.txt
 #  Implicit rule search has not been done.
 #  Modification time never checked.
 #  File has not been updated.
+#  commands to execute (from `Makefile', line 10):
+	python3 -m venv $(VENV)
+	$(PIP) install -r requirements.txt
+	
 
 # Not a target:
 .SUFFIXES:
@@ -183,6 +200,15 @@ all:
 
 # Not a target:
 Makefile:
+#  Implicit rule search has been done.
+#  Last modified 2022-06-21 00:24:25
+#  File has been updated.
+#  Successfully updated.
+# variable set hash-table stats:
+# Load=0/32=0%, Rehash=0, Collisions=0/0=0%
+
+# Not a target:
+requirements.txt:
 #  Implicit rule search has not been done.
 #  Modification time never checked.
 #  File has not been updated.
@@ -193,21 +219,25 @@ Makefile:
 #  Modification time never checked.
 #  File has not been updated.
 
-run:
+run: venv/bin/activate
 #  Implicit rule search has not been done.
 #  Modification time never checked.
 #  File has not been updated.
-#  commands to execute (from `Makefile', line 2):
-	python3 ./BacktrackingTest.py
+#  commands to execute (from `Makefile', line 7):
+	$(PYTHON) $(PATH)/tests/SudokuTest.py
 	
 
 clean:
 #  Implicit rule search has not been done.
 #  Modification time never checked.
 #  File has not been updated.
+#  commands to execute (from `Makefile', line 14):
+	rm -rf src/__pycache__
+	rm -rf $(VENV)
+	
 
 # files hash-table stats:
-# Load=6/1024=1%, Rehash=0, Collisions=0/7=0%
+# Load=8/1024=1%, Rehash=0, Collisions=0/22=0%
 # VPATH Search Paths
 
 # No `vpath' search paths.
@@ -219,6 +249,6 @@ clean:
 # strcache size: total = 4096 / max = 4096 / min = 4096 / avg = 4096
 # strcache free: total = 4087 / max = 4087 / min = 4087 / avg = 4087
 
-# Finished Make data base on Tue Jun 21 11:10:05 2022
+# Finished Make data base on Tue Jul  5 10:41:32 2022
 
  

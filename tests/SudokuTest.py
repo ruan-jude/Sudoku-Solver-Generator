@@ -1,7 +1,7 @@
 import sys, os, glob, time, typing, copy
 sys.path.append(".")
-from src.BacktrackingSudoku import BacktrackingSudoku
-from src.HeuristicSudoku import HeuristicSudoku
+from src.BacktrackingSolver import BacktrackingSudoku
+from src.HeuristicSolver import HeuristicSudoku
 
 def openBoard(path : str) -> typing.Tuple[list, list]:
     '''

@@ -87,8 +87,10 @@ class HeuristicSudoku:
         self.solveCount += 1
         emptyCell = self.findEmpty()
 
+        # if there is a cell with insufficient remaining values
+        if emptyCell == False: return False
         # if there are no empty cells, board must be complete
-        if not emptyCell: return True
+        if emptyCell == None: return True
         # otherwise, set row and col
         row, col = emptyCell
 
@@ -152,7 +154,7 @@ class HeuristicSudoku:
 
         # col update
         for r in range(9):
-            if r != row and (r, col) not in updatedCells and num in self.remVals[r][col]:
+            if r != row and num in self.remVals[r][col]:
                 updatedCells.add((r, col))
                 self.numCount[r][col] -= 1
                 self.remVals[r][col].discard(num)
@@ -161,7 +163,7 @@ class HeuristicSudoku:
         boxRow, boxCol = row // 3, col // 3
         for r in range(boxRow * 3, boxRow * 3 + 3):
             for c in range(boxCol * 3, boxCol * 3 + 3):
-                if (r, c) != (row, col) and (r, c) not in updatedCells and num in self.remVals[r][c]:
+                if (r, c) != (row, col) and num in self.remVals[r][c]:
                     updatedCells.add((r, c))
                     self.numCount[r][c] -= 1
                     self.remVals[r][c].discard(num)
@@ -198,6 +200,7 @@ class HeuristicSudoku:
         arr = np.array(self.numCount)
         smallestInd = np.unravel_index(arr.argmin(), arr.shape)
 
+        if self.numCount[smallestInd[0]][smallestInd[1]] == 0: return False
         if self.numCount[smallestInd[0]][smallestInd[1]] == inf: return None
 
         return smallestInd
