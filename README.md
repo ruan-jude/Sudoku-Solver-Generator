@@ -37,11 +37,11 @@ make run
 - [ ] Computer vision implementation
 
 ## **Heuristics Implemented**
-1. __Area inconsistency and insufficiency__: Two cells cannot share the same value, and each cell must have a valid value to set
-    - __Extension by factoring two uniqueness heuristics__: Utilizes a chain of reasoning to select a cell value
-2. __Area set cover elimination__: A subset of cells may share a subset of possible values which can't be found outside of the given cell subset
-3. __Unique row/column combination__: A cell must hold a certain value because it already exists in every other row & column
-4. __Unique mention in area__: A value has only one cell mention in a given row, column, or 3x3 box, meaning that it must be placed in that cell
+1. <u>Area inconsistency and insufficiency</u>: Two cells cannot share the same value, and each cell must have a valid value to set
+    - <u>Extension by factoring two uniqueness heuristics</u>: Utilizes a chain of reasoning to select a cell value
+2. <u>Area set cover elimination</u>: A subset of cells may share a subset of possible values which can't be found outside of the given cell subset
+3. <u>Unique row/column combination</u>: A cell must hold a certain value because it already exists in every other row & column
+4. <u>Unique mention in area</u>: A value has only one cell mention in a given row, column, or 3x3 box, meaning that it must be placed in that cell
 
 ## **Sudoku Boards and Heuristic Utilization**
 Boards and rankings are obtained from [Sudoku Sandiway](https://sandiway.arizona.edu/sudoku/examples.html).
