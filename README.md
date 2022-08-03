@@ -7,6 +7,7 @@ Sudoku-Solver-Generator is comprised of three individual parts:
 3. Generate, store, and rank Sudoku boards using backtracking and techniques mentioned by [Daniel Beer](https://dlbeer.co.nz/articles/sudoku.html).
 
 # **Running the Project**
+Run from directory with ```Makefile``` 
 ```bash
 make run
 ```

@@ -8,29 +8,25 @@ class HeuristicSudoku:
     A class used to represent a Sudoku Board with backtracking implementation
     Heuristics used to reduce runtime (testing)
 
-    ...
+    ---
     
     Attributes
         bo : list
             2D array which holds current state of Sudoku board 
-        remVals : list
-            2D array where each cell holds a set of possible values for that cell
-        numCount : list
-            2D array which holds the count for remaining values for each board cell
-            Value set to 'inf' if the number is set
-        valueCount : dictionary
-            Holds the count for each possible Sudoku board value
-            Equals 0 when the cell is set
         solveCount : int
             Counts how many time solve is called
+        numSetCount : dictionary
+            Counts the number of times a value is placed in board
+        cellRemVals : list
+            2D array where each cell holds a set of possible values for that cell
+        cellRemCount : list
+            2D array which holds the count for remaining values for each board cell
+            Value set to 'inf' if the number is set
+        
 
-    ...
+    ---
 
     Methods
-        solveBoard(self) -> bool
-            Solves instantiated board through backtracking with heuristics
-        updateRemVals(self, num : int, row : int, col : int) -> set
-            Updates remaining values for all cells in row, col, and box
         returnRemVals(self, updatedCells : set, num : int) -> None
             Returns the num to each cell listed in updatedCells
         findEmpty(self) -> typing.Tuple[int, int]
@@ -50,39 +46,25 @@ class HeuristicSudoku:
         Sets board to example board
         '''
         self.bo = board
-        self.remVals = [[set([1, 2, 3, 4, 5, 6, 7, 8, 9]) for __ in range(9)] for _ in range(9)]
-        self.numCount = [[9]*9 for _ in range(9)]
-        self.valueCount = {0:0, 1:0, 2:0, 3:0, 4:0, 5:0, 6:0, 7:0, 8:0, 9:0}
         self.solveCount = 0
+        self.numSetCount = {0:0, 1:0, 2:0, 3:0, 4:0, 5:0, 6:0, 7:0, 8:0, 9:0}
+        self.cellRemVals = [[set([1, 2, 3, 4, 5, 6, 7, 8, 9]) for __ in range(9)] for _ in range(9)]
+        self.cellRemCount = [[9]*9 for _ in range(9)]
 
-        # sets numCount for all set cells to 'inf'
-        for r in range(9):
-            for c in range(9):
-                if self.bo[r][c] != 0:
-                    self.numCount[r][c] = inf
-        
-        # initial remVals, numCount, and valueCount
+        # sets cellRemCount for all set cells to 'inf'
+        # initializes remVals, numCount, and valueSetCount
         for r in range(9):
             for c in range(9):
                 n = self.bo[r][c]
                 if n != 0:
-                    self.valueCount[n] += 1
+                    self.cellRemCount[r][c] = inf
+                    self.numSetCount[n] += 1
                     self.updateRemVals(n, r, c)
+                    
     
-    def solveBoard(self):
+    def solveBoard(self) -> bool:
         ''' 
-        Solves instantiated board through backtracking with heuristics 
-        
-        ...
-
-        Implementation Note(s)
-            If there are no empty cells, board must necessarily be complete
-        
-        ...
-
-        Returns
-            True    Board solution is found and bo is updated
-            False   Board solution is NOT found
+        Solves instantiated board through backtracking with heuristics
         '''
         self.solveCount += 1
         emptyCell = self.findEmpty()
@@ -93,27 +75,27 @@ class HeuristicSudoku:
         if emptyCell == None: return True
         # otherwise, set row and col
         row, col = emptyCell
-
-        for n in self.remVals[row][col]:
+        
+        for n in self.cellRemVals[row][col]:
             # update Board
             self.bo[row][col] = n
-            # save and update numCount
-            prevNumCount = self.numCount[row][col]
-            self.numCount[row][col] = inf
-            # update valueCount
-            self.valueCount[n] += 1
-            # update remVals
+            # save/update cellRemCount[row][col]
+            prevRemCount = self.cellRemCount[row][col]
+            self.cellRemCount[row][col] = inf
+            # update numSetCount
+            self.numSetCount[n] += 1
+            # update cellRemVals
             updatedCells = self.updateRemVals(n, row, col)
 
             if self.solveBoard(): return True
 
             # reset Board
             self.bo[row][col] = 0
-            # reset numCount
-            self.numCount[row][col] = prevNumCount
-            # reset valueCount
-            self.valueCount[n] -= 1
-            # reset remVals that were changed
+            # reset cellRemCount[row][col]
+            self.cellRemCount[row][col] = prevRemCount
+            # reset numSetCount
+            self.numSetCount[n] -= 1
+            # reset cellRemVals that were changed
             self.returnRemVals(updatedCells, n)
         
         return False
@@ -122,23 +104,7 @@ class HeuristicSudoku:
         ''' 
         Updates remaining values for all cells in row, col, and box
 
-        ...
-
-        Implementation Note(s)
-            Boxes are numbered where each number is a 3x3 grid
-            0 | 1 | 2
-            3 | 4 | 5
-            6 | 7 | 8
-
-        ...
-
-        Parameters
-            num : int
-                Number to be removed from each relevant cell
-            row : int
-            col : int
-
-        ...
+        ---
 
         Returns
             updatedCells    set of cells that were updated with the values
@@ -147,26 +113,26 @@ class HeuristicSudoku:
 
         # row update
         for c in range(9):
-            if c != col and num in self.remVals[row][c]:
+            if c != col and num in self.cellRemVals[row][c]:
                 updatedCells.add((row, c))
-                self.numCount[row][c] -= 1
-                self.remVals[row][c].discard(num)
+                self.cellRemCount[row][c] -= 1
+                self.cellRemVals[row][c].discard(num)
 
         # col update
         for r in range(9):
-            if r != row and num in self.remVals[r][col]:
+            if r != row and num in self.cellRemVals[r][col]:
                 updatedCells.add((r, col))
-                self.numCount[r][col] -= 1
-                self.remVals[r][col].discard(num)
+                self.cellRemCount[r][col] -= 1
+                self.cellRemVals[r][col].discard(num)
         
         # box update
         boxRow, boxCol = row // 3, col // 3
         for r in range(boxRow * 3, boxRow * 3 + 3):
             for c in range(boxCol * 3, boxCol * 3 + 3):
-                if (r, c) != (row, col) and num in self.remVals[r][c]:
+                if (r, c) != (row, col) and num in self.cellRemVals[r][c]:
                     updatedCells.add((r, c))
-                    self.numCount[r][c] -= 1
-                    self.remVals[r][c].discard(num)
+                    self.cellRemCount[r][c] -= 1
+                    self.cellRemVals[r][c].discard(num)
 
         return updatedCells
 
@@ -175,35 +141,47 @@ class HeuristicSudoku:
         Returns the num to each cell listed in updatedCells
         Updates numCount as well
 
-        ...
+        ---
 
         Parameters
             updatedCells
                 set containing all cells to return num into
-            num
         ''' 
         for cell in updatedCells:
             row, col = cell
-            self.remVals[row][col].add(num)
-            self.numCount[row][col] += 1
+            self.cellRemVals[row][col].add(num)
+            self.cellRemCount[row][col] += 1
 
     def findEmpty(self) -> typing.Tuple[int, int]:
         '''
-        Finds empty cell to test, will prioritize lowest value
-        
-        ...
-        
-        Returns
-            Tuple[row, col]     If empty cell found
-            None                Otherwise
+        Finds empty cell to test, prioritizing lowest value
         '''
+        
+        # check to find if a value has only one remaining position
+        #res = dict((val, key) for key, val in self.valueSetCount.items()).get(1)
+        #if res != None: 
+        # finds the index with the smallest remaining value count
+        arr = np.array(self.cellRemCount)
+        smallestInd = np.unravel_index(arr.argmin(), arr.shape)
+
+        if self.cellRemCount[smallestInd[0]][smallestInd[1]] == 0: return False
+        if self.cellRemCount[smallestInd[0]][smallestInd[1]] == inf: return None
+
+        smallestInd = (smallestInd[0], smallestInd[1])
+
+        return smallestInd
+        '''
+
         arr = np.array(self.numCount)
         smallestInd = np.unravel_index(arr.argmin(), arr.shape)
 
         if self.numCount[smallestInd[0]][smallestInd[1]] == 0: return False
         if self.numCount[smallestInd[0]][smallestInd[1]] == inf: return None
 
+        smallestInd = (smallestInd[0], smallestInd[1], -1)
+
         return smallestInd
+        '''
 
     def printBoard(self) -> None:
         ''' Prints the current state of the board with proper spacing '''
@@ -218,7 +196,7 @@ class HeuristicSudoku:
         
         print()
 
-    def printSolveCount(self) -> None:
+    def getSolveCount(self) -> None:
         ''' Prints the number of times Solve is called '''
         return self.solveCount 
 

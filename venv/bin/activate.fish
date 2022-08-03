@@ -29,7 +29,7 @@ end
 # Unset irrelevant variables.
 deactivate nondestructive
 
-set -gx VIRTUAL_ENV "/Users/ruanjude/home/code/python/Sudoku-Solver-Generator/venv"
+set -gx VIRTUAL_ENV "/Users/ruanjude/Documents/home/code/python/Sudoku-Solver-Generator/venv"
 
 set -gx _OLD_VIRTUAL_PATH $PATH
 set -gx PATH "$VIRTUAL_ENV/bin" $PATH

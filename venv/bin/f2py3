@@ -1,4 +1,4 @@
-#!/Users/ruanjude/home/code/python/Sudoku-Solver-Generator/venv/bin/python3.9
+#!/Users/ruanjude/Documents/home/code/python/Sudoku-Solver-Generator/venv/bin/python3.9
 # -*- coding: utf-8 -*-
 import re
 import sys

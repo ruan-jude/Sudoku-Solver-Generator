@@ -37,7 +37,7 @@ deactivate () {
 # unset irrelevant variables
 deactivate nondestructive
 
-VIRTUAL_ENV="/Users/ruanjude/home/code/python/Sudoku-Solver-Generator/venv"
+VIRTUAL_ENV="/Users/ruanjude/Documents/home/code/python/Sudoku-Solver-Generator/venv"
 export VIRTUAL_ENV
 
 _OLD_VIRTUAL_PATH="$PATH"

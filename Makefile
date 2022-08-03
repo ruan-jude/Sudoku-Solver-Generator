@@ -1,7 +1,7 @@
 VENV = venv
 PYTHON = $(VENV)/bin/python3
 PIP = $(VENV)/bin/pip
-PATH = /Users/ruanjude/home/code/python/Sudoku-Solver-Generator
+PATH = $(CURDIR)
 
 run: $(VENV)/bin/activate
 	$(PYTHON) $(PATH)/tests/SudokuTest.py
