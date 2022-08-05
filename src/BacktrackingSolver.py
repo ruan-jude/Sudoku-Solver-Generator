@@ -2,39 +2,18 @@ import typing
 
 class BacktrackingSudoku:
     """
-
     A class used to represent a Sudoku Board with simple backtracking implementation
-    
-    ...
-    
+    ---
     Attributes
         bo : list
             2D array which holds current state of Sudoku board 
         solveCount : int
             Counts how many time solve is called
-
-    ...
-
-    Methods
-        solveBoard(self) -> bool
-            Solves instantiated board through simple backtracking 
-        findEmpty(self) -> typing.Tuple[int, int]
-            Finds first empty cell to test
-        validPosition(self, num : int, row : int, col : int) -> bool
-            Checks if num can go into the given cell (row, col)
-        printBoard(self) -> None
-            Prints the current state of the board with proper spacing
-        printSolveCount(self) -> None
-            Prints the number of times Solve is called 
-        getBoard(self) -> list
-            Returns board
-
     """
 
     def __init__(self, board : list):
         ''' 
         Each instance represents a single Sudoku board 
-        Sets board to example board
         '''
         self.bo = board
         self.solveCount = 0
@@ -42,17 +21,9 @@ class BacktrackingSudoku:
     def solveBoard(self) -> bool:
         ''' 
         Solves instantiated board through simple backtracking 
-        
-        ...
-
+        ---
         Implementation Note(s)
             If there are no empty cells, board must necessarily be complete
-        
-        ...
-
-        Returns
-            True    Board solution is found and bo is updated
-            False   Board solution is NOT found
         '''
         self.solveCount += 1
         emptyCell = self.findEmpty()
@@ -73,12 +44,6 @@ class BacktrackingSudoku:
     def findEmpty(self) -> typing.Tuple[int, int]:
         '''
         Finds first empty cell to test
-        
-        ...
-        
-        Returns
-            Tuple[row, col]     If empty cell found
-            None                Otherwise
         '''
         for r in range(9):
             for c in range(9):
@@ -90,29 +55,6 @@ class BacktrackingSudoku:
     def validPosition(self, num : int, row : int, col : int) -> bool:
         ''' 
         Checks if num can go into the given cell (row, col)
-
-        ...
-
-        Implementation Note(s)
-            Boxes are numbered where each number is a 3x3 grid
-            0 | 1 | 2
-            3 | 4 | 5
-            6 | 7 | 8
-
-        ...
-
-        Parameters
-            num : int
-                Number to be tested in given cell
-            row : int
-            col : int
-
-        ...
-
-        Returns
-        -------
-            True    num can go into position
-            False   num can NOT go into position
         '''
         # row check
         for c in range(9):
@@ -134,7 +76,9 @@ class BacktrackingSudoku:
         return True
 
     def printBoard(self) -> None:
-        ''' Prints the current state of the board with proper spacing '''
+        ''' 
+        Prints the current state of the board with proper spacing 
+        '''
         for r in range(9):
             if r % 3 == 0 and r != 0: print("- - - - - - - - - - - - ")
 
@@ -146,10 +90,14 @@ class BacktrackingSudoku:
         
         print()   
 
-    def printSolveCount(self) -> None:
-        ''' Prints the number of times Solve is called '''
+    def getSolveCount(self) -> None:
+        ''' 
+        Prints the number of times Solve is called 
+        '''
         return self.solveCount 
 
     def getBoard(self) -> list:
-        ''' Returns board list ''' 
+        ''' 
+        Returns board list 
+        ''' 
         return self.bo           

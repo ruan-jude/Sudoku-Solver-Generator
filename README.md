@@ -32,7 +32,7 @@ make run
     - [x] Simple area inconsistency
     - [x] Area insufficiency
     - [ ] Area set cover elimination
-    - [ ] Unique number area
+    - [x] Unique number area
     - [ ] Unique number mention
 - [ ] Board generation
 - [ ] Computer vision implementation
@@ -66,11 +66,13 @@ We will consider each recursive call to the solve method as an iteration.
 
 For simple backtracking, an empty cell is selected (step 1) by iterating through each cell until an empty one is found. Each digit from 1-9 is checked to be valid in the given cell, and if the digit is valid it is placed (step 2). These two steps choose cells and select digits arbitrarily and can lead to very long runtimes if unlucky.
 
-For backtracking using heuristics we will be implementing logical tricks used by humans to help reduce possible cell values (described in the [Heuristics](#heuristics-implemented) section). The overall structure of the program does not change. We first select an empty cell (step 1), but now we select the cell with the minimum amount of remaining values maintained by the ```numCount``` structure. Each possible cell value, maintained by the ```remVals``` structure, is placed and tested (step 2). Throughout the code we implement the different heuristics, which we will now go over. 
+For backtracking using heuristics we will be implementing logical tricks used by humans to help reduce possible cell values (described in the [Heuristics](#heuristics-implemented) section). The overall structure of the program does not change. We first select an empty cell (step 1), but now we select the cell with the minimum amount of remaining values maintained by the ```cellRemCount``` structure. Each possible cell value, maintained by the ```cellRemVals``` structure, is placed and tested (step 2). Throughout the code we implement the different heuristics, which we will now go over. 
 
 ## **Heuristic Implementation**
 
-The easiest of the heuristics to implement was number 1. To avoid inconsistency errors, the ```remVals``` structure was used to hold each cells' possible, remaining values. Every time a cell is set, every cell in the same row, column, and 3x3 box were updated accordingly in the structure. To avoid insufficiency errors, the ```numCount``` structure was used to hold the number of possible values a cell may have. If a cell has no possible values remaining it's count would be set to 0. An easy check is implemented to avoid this. It's extension requiring chaining is naturally implemented through backtracking. 
+The easiest of the heuristics to implement was number 1 - area inconsistency and insufficiency. To avoid inconsistency errors, the ```cellRemVals``` structure was used to hold each cells' possible, remaining values. Every time a cell is set, every cell in the same row, column, and 3x3 box were updated accordingly in the structure. To avoid insufficiency errors, the ```cellRemCount``` structure was used to hold the number of possible values a cell may have. If a cell has no possible values remaining it's count would be set to 0. An easy check is implemented to avoid this. It's extension requiring chaining is naturally implemented through backtracking. 
+
+The next heuristic implemented was number 3 - unique row/column combination. A value can only be placed in the board a maximum of 9 times, so to maintain the number of times a value is still yet to be placed I created the ```numSetRem``` dictionary. Whenever a values count reaches 1 we find the only remaining location through a quick board search. An alternative way to approach this problem is to keep track of the rows and columns which the value is placed, in order to avoid whole board search and somewhat instantaneous cell find.
 
 
 

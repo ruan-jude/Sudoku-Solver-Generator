@@ -35,8 +35,8 @@ def openBoard(path : str) -> typing.Tuple[list, list]:
 
 if __name__ == "__main__":
     os.chdir("./tests/sampleBoards") 
-    print("Simple vs heuristic backtracking")
-    print("---------------------------------")
+    print("\t\t\tSimple\t\tHeuristic")
+    print("\t\t\t------\t\t---------")
     # Tests heuristic and simple backtracking method 
     # Printing solve count and time elapsed
     for file in glob.glob("*.txt"): 
